@@ -3,6 +3,9 @@ import queryString from 'query-string';
 import io from 'socket.io-client';
 
 import './Chat.css';
+import InfoBar from '../InfoBar/InfoBar';
+import Input from '../Input/Input';
+import Messages from '../Messages/Messages';
 
 let socket;
 
@@ -26,12 +29,6 @@ const Chat = ({ location }) => {
         socket.emit('join', { name, room }, () => {
 
         });
-
-        return () => {
-            socket.emit('disconnect');
-            socket.off();
-        }
-
     }, [ENDPOINT, location.search]);
 
     useEffect(() => {
@@ -54,11 +51,9 @@ const Chat = ({ location }) => {
     return(
         <div className="outerContainer">
             <div className="container">
-                <input 
-                    value={message} 
-                    onChange={(event) => setMessage(event.target.value)}
-                    onKeyPress={event => event.key === 'Enter' ? sendMessage(event): null}
-                    />
+                <InfoBar room={room}/>
+                <Messages messages={messages} name={name}/>
+                <Input message={message} setMessage={setMessage} sendMessage={sendMessage}/>
             </div>
         </div>
     )
